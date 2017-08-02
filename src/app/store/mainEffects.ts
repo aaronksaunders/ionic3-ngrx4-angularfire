@@ -14,8 +14,8 @@ import { of } from "rxjs/observable/of";
 import { Observable } from 'rxjs';
 import { Effect, Actions, toPayload } from "@ngrx/effects";
 
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { AngularFireAuth, AngularFireAuthProvider } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 
 @Injectable()
@@ -50,7 +50,6 @@ export class MainEffects {
     @Effect() checkAuth$ = this.action$.ofType('CHECK_AUTH')
         .do((action) => console.log(`Received ${action.type}`))
         .switchMap(() => this.auth$.authState)
-        .take(1)
         .map((_result) => {
             if (_result) {
                 console.log("in auth subscribe", _result)
@@ -102,6 +101,9 @@ export class MainEffects {
             this.auth$.auth.signInWithEmailAndPassword(_creds.email, _creds.password)
                 .then((_result) => {
                     return observer.next({ type: LOGIN_SUCCESS, payload: _result })
+                }, (error) => {
+                    console.log("error", error)
+                    return observer.next({ type: LOGIN_FAILED, payload: error })
                 })
         })
     }

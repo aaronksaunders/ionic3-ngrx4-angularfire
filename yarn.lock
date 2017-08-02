@@ -131,17 +131,21 @@
     localforage "~1.4.2"
     localforage-cordovasqlitedriver "~1.5.0"
 
-"@ngrx/effects@github:ngrx/effects-builds":
+"@ngrx/core@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/core/-/core-1.2.0.tgz#882b46abafa2e0e6d887cb71a1b2c2fa3e6d0dc6"
+
+"@ngrx/effects@4.0.1":
   version "4.0.1"
-  resolved "https://codeload.github.com/ngrx/effects-builds/tar.gz/474e58ca5f7efdce3507d8461d50d645cfffcb76"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-4.0.1.tgz#9403d5668c70217eb5c84ba7a5ffebbbcf507b34"
 
 "@ngrx/store-devtools@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-4.0.0.tgz#b79c24773217df7fd9735ad21f9cbf2533c96e04"
 
-"@ngrx/store@github:ngrx/store-builds":
+"@ngrx/store@4.0.0":
   version "4.0.0"
-  resolved "https://codeload.github.com/ngrx/store-builds/tar.gz/f0fe55fd3c5e6081298a2ae9aad9e20fe1500748"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-4.0.0.tgz#714d82056f0eb31518ca85a68a5cfecfc12cc50b"
 
 "@types/localforage@0.0.30":
   version "0.0.30"

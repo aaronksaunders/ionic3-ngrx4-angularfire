@@ -5,14 +5,15 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store'
-import { State, CHECK_AUTH, LOGOUT, LOGIN, CREATE_USER, GET_FIREBASE_ARRAY } from './../../app/store/mainReducer';
-
+import { State } from './../../app/store/mainReducer';
+import { All } from './../../app/store/mainActions';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
   //directives: [REACTIVE_FORM_DIRECTIVES]
 })
+
 
 export class HomePage implements OnInit {
 
@@ -46,7 +47,11 @@ export class HomePage implements OnInit {
 
 
   ngOnInit() {
-    // this.store.dispatch({ type: CHECK_AUTH, payload: {} });
+
+  }
+
+  ionViewDidLoad() {
+    this.store.dispatch(new All().checkAuthAction());
   }
 
   ionViewWillUnload() {
@@ -55,17 +60,14 @@ export class HomePage implements OnInit {
 
 
   doLogout() {
-    this.store.dispatch({ type: LOGOUT });
+    this.store.dispatch(new All().logoutAction());
   }
 
   doLogin(_credentials) {
     this.submitted = true;
 
     if (_credentials.valid) {
-      this.store.dispatch({
-        type: LOGIN,
-        payload: _credentials.value
-      });
+      this.store.dispatch(new All().loginAction(_credentials.value))
     }
 
   }
@@ -75,18 +77,14 @@ export class HomePage implements OnInit {
     this.submitted = true;
 
     if (_credentials.valid) {
-      this.store.dispatch({
-        type: 'CREATE_USER',
-        payload: _credentials.value
-      });
+      this.store.dispatch(new All().createUserAction(_credentials.value))
     }
   }
 
   doQuery() {
-    this.store.dispatch({
-      type: GET_FIREBASE_ARRAY,
-      payload: { path: 'assets' }
-    });
+
+    this.store.dispatch(new All().fetchFirebaseArrayAction({ path: 'assets' }))
+
   }
 
   // doItemQuery

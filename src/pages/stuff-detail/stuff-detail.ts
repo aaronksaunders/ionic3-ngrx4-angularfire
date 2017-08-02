@@ -1,5 +1,6 @@
 import { Store } from '@ngrx/store';
-import { GET_FIREBASE_OBJECT, State } from './../../app/store/mainReducer';
+import { State } from './../../app/store/mainReducer';
+import { All } from './../../app/store/mainActions';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
@@ -35,12 +36,7 @@ export class StuffDetailPage {
     console.log('ionViewDidLoad StuffDetailPage');
     let itemId = this.navParams.get('itemId');
 
-    this.store.dispatch({
-      type: GET_FIREBASE_OBJECT,
-      payload: {
-        path: `assets/${itemId}`
-      }
-    });
+    this.store.dispatch(new All().fetchFirebaseObjectAction({ path: `assets/${itemId}` }));
   }
 
 

@@ -24,7 +24,7 @@
       <ion-list>
         <ion-item *ngFor="let item of (storeInfo | async)?.dataArray">
           <div>{{item.name}}</div>
-          <p>{{item.location}}</p>
+          <p>{{item.when | date }}</p>
           <button ion-button (click)="doItemQuery(item)">GET ITEM</button>
         </ion-item>
       </ion-list>
