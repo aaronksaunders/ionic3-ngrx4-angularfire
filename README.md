@@ -5,7 +5,7 @@
 ## A basic application for Ionic 3  with AngularFire2 & ngrx4 Integration
 
 - Login with email address & password
-// TODO - Automatically login if a session already exists
+- Automatically login if a session already exists
 - Create accounts
 - Login with Account
 - Integration of ngrx/store & ngrx/effects to manage state
@@ -18,9 +18,9 @@
 
 cli packages:
 
-    @ionic/cli-plugin-ionic-angular : 1.4.0 (/Users/aaronsaunders/dev/projects/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-plugin-ionic-angular)
-    @ionic/cli-utils                : 1.6.0 (/Users/aaronsaunders/dev/projects/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-utils)
-    ionic (Ionic CLI)               : 3.6.0 (/Users/aaronsaunders/dev/projects/ionic2/ionic3-ngrx-angularfire/node_modules/ionic)
+    @ionic/cli-plugin-ionic-angular : 1.4.0 ($HOME/dev/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-plugin-ionic-angular)
+    @ionic/cli-utils                : 1.6.0 ($HOME/dev/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-utils)
+    ionic (Ionic CLI)               : 3.6.0 ($HOME/dev/ionic2/ionic3-ngrx-angularfire/node_modules/ionic)
 
 local packages:
 
