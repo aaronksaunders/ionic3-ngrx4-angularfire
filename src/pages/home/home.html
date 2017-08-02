@@ -1,14 +1,73 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Firebase ngrx Ionic2
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+  <!-- display errors here -->
+  <ion-row responsive-sm *ngIf="(storeInfo | async)?.error">
+    <ion-col>
+      <strong>
+            <h4  style="color:red">Error:&nbsp;{{ (storeInfo | async)?.error }}</h4>
+        </strong>
+    </ion-col>
+  </ion-row>
+
+  <!-- if we have a user and then show the list of stuff -->
+  <div *ngIf="(storeInfo | async)?.currentUser">
+    <pre>{{storeInfo.currentUser?.auth.email}}</pre>
+    <ion-row responsive-sm>
+      <ion-list>
+        <ion-item *ngFor="let item of (storeInfo | async)?.dataArray">
+          <div>{{item.name}}</div>
+          <p>{{item.location}}</p>
+          <button ion-button (click)="doItemQuery(item)">GET ITEM</button>
+        </ion-item>
+      </ion-list>
+    </ion-row>
+    <ion-row responsive-sm>
+      <ion-col>
+        <button ion-button (click)="doLogout()" color="primary" block>Logout</button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <!-- if we have checked auth and still dont have a user then show login information -->
+  <div *ngIf="(storeInfo | async)?.authChecked && !(storeInfo | async)?.currentUser">
+    <form #loginForm="ngForm" novalidate>
+      <ion-item>
+        <ion-label floating color="primary">Username</ion-label>
+        <ion-input [(ngModel)]="credentials.email" name="email" type="text" #email="ngModel" spellcheck="false" autocapitalize="off"
+          required>
+        </ion-input>
+      </ion-item>
+      <p [hidden]="email.valid || submitted == false" color="danger" padding-left>
+        Username is required
+      </p>
+
+      <ion-item>
+        <ion-label floating color="primary">Password</ion-label>
+        <ion-input [(ngModel)]="credentials.password" name="password" type="password" #password="ngModel" required>
+        </ion-input>
+      </ion-item>
+      <p [hidden]="password.valid || submitted == false" color="danger" padding-left>
+        Password is required
+      </p>
+
+      <ion-row responsive-sm>
+        <ion-col>
+          <button ion-button (click)="doLogin(loginForm)" type="submit" color="primary" block>Login</button>
+        </ion-col>
+        <ion-col>
+          <button ion-button (click)="doCreateUser(loginForm)" type="submit" color="primary" block>Create User</button>
+        </ion-col>
+      </ion-row>
+
+
+    </form>
+  </div>
 </ion-content>
