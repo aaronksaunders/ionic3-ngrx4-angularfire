@@ -1,26 +1,45 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+# Ionic3.0 Angularfire2 w/ state management using ngrx4
 
-## How to use this template
+ ![ionic2](https://raw.githubusercontent.com/aaronksaunders/ionic2.0-angularfire/master/Untitled.png)
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
+## A basic application for Ionic 3  with AngularFire2 & ngrx4 Integration
 
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
+- Login with email address & password
+// TODO - Automatically login if a session already exists
+- Create accounts
+- Login with Account
+- Integration of ngrx/store & ngrx/effects to manage state
+- Query List Objects
+- Find a specific List Object
 
-### With the Ionic CLI:
+## Ionic Version Information
 
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+```console
 
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
+cli packages:
+
+    @ionic/cli-plugin-ionic-angular : 1.4.0 (/Users/aaronsaunders/dev/projects/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-plugin-ionic-angular)
+    @ionic/cli-utils                : 1.6.0 (/Users/aaronsaunders/dev/projects/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-utils)
+    ionic (Ionic CLI)               : 3.6.0 (/Users/aaronsaunders/dev/projects/ionic2/ionic3-ngrx-angularfire/node_modules/ionic)
+
+local packages:
+
+    @ionic/app-scripts : 2.1.3
+    Ionic Framework    : ionic-angular 3.6.0
+
+System:
+
+    Android SDK Tools : 26.0.2
+    Node              : v6.9.1
+    OS                : macOS Sierra
+    Xcode             : Xcode 8.3.3 Build version 8E3004b 
+    ios-deploy        : 1.9.1 
+    ios-sim           : 6.0.0 
+    npm               : 5.3.0 
+
 ```
 
-Then, to run it, cd into `myBlank` and run:
+## More Information on ngRx4
 
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
-
-Substitute ios for android if not on a Mac.
-
+* More Information on ngrx/store: [https://github.com/ngrx/platform/blob/master/docs/store/README.md](https://github.com/ngrx/platform/blob/master/docs/store/README.md)
+* More Information on ngrx/effects: [https://github.com/ngrx/platform/blob/master/docs/effects/README.md](https://github.com/ngrx/platform/blob/master/docs/effects/README.md)
