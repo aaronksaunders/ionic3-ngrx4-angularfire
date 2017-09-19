@@ -39,6 +39,23 @@ System:
 
 ```
 
+## Firebase Configuration
+
+Must export the config, create a file in the `/src/environment.ts` that looks like this..
+
+see comment in code - https://github.com/aaronksaunders/ionic3-ngrx4-angularfire/blob/master/src/app/app.module.ts#L26
+
+```
+export const firebaseProps = {
+   "apiKey": " ",
+   "authDomain": " ",
+   "databaseURL": " ",
+   "projectId": " ",
+   "storageBucket": " ",
+   "messagingSenderId": ""
+}
+```
+
 ## More Information on ngRx4
 
 * More Information on ngrx/store: [https://github.com/ngrx/platform/blob/master/docs/store/README.md](https://github.com/ngrx/platform/blob/master/docs/store/README.md)
