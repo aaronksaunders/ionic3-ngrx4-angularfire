@@ -22,6 +22,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { firebaseProps } from './../environment'
+import { InputModalPage } from '../pages/input-modal/input-modal';
 
 // Must export the config, create a file in the /src/environment.ts that
 // looks like this..
@@ -54,13 +55,15 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    StuffDetailPage
+    StuffDetailPage,
+    InputModalPage
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    StuffDetailPage
+    StuffDetailPage,
+    InputModalPage
   ],
   providers: [StatusBar, SplashScreen]
 })

@@ -18,6 +18,10 @@ export const GET_FIREBASE_OBJECT: string = "GET_FIREBASE_OBJECT";
 export const GET_FIREBASE_OBJECT_SUCCESS: string = "GET_FIREBASE_OBJECT_SUCCESS";
 export const GET_FIREBASE_OBJECT_FAILED: string = "GET_FIREBASE_OBJECT_FAILED"
 
+export const CREATE_FIREBASE_OBJECT: string = "CREATE_FIREBASE_OBJECT";
+export const CREATE_FIREBASE_OBJECT_SUCCESS: string = "CREATE_FIREBASE_OBJECT_SUCCESS";
+export const CREATE_FIREBASE_OBJECT_FAILED: string = "CREATE_FIREBASE_OBJECT_FAILED"
+
 export const CHECK_AUTH: string = "CHECK_AUTH";
 export const CHECK_AUTH_SUCCESS: string = "CHECK_AUTH_SUCCESS";
 export const CHECK_AUTH_NO_USER: string = "CHECK_AUTH_NO_USER";
@@ -41,7 +45,7 @@ export interface State {
 
 
 
-export function mainAppStoreReducer(state = intitialState, action: any) {
+export function mainAppStoreReducer(state:State = intitialState, action: any) {
 
   switch (action.type) {
 
@@ -117,6 +121,19 @@ export function mainAppStoreReducer(state = intitialState, action: any) {
     case GET_FIREBASE_OBJECT_FAILED: {
       return Object.assign({}, state, { error: action.payload, loading: false })
     }
+
+    // CREATE AN OBJECT IN THE DATASTORE
+    case CREATE_FIREBASE_OBJECT: {
+      return Object.assign({}, state, { dataObject: action.payload, loading: true })
+    }
+    case CREATE_FIREBASE_OBJECT_SUCCESS: {
+      state.dataArray = [ ...state.dataArray, action.payload.object]
+      return Object.assign({}, state, { dataObject: action.payload.object, loading: false })
+    }
+    case CREATE_FIREBASE_OBJECT_FAILED: {
+      return Object.assign({}, state, { error: action.payload, loading: false })
+    }
+
     default: {
       return state;
     }

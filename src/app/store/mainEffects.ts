@@ -6,12 +6,15 @@ import {
     CREATE_USER_FAILED, GET_FIREBASE_ARRAY, GET_FIREBASE_ARRAY_SUCCESS,
     GET_FIREBASE_ARRAY_FAILED,
     GET_FIREBASE_OBJECT, GET_FIREBASE_OBJECT_SUCCESS,
-    GET_FIREBASE_OBJECT_FAILED
+    GET_FIREBASE_OBJECT_FAILED,
+    CREATE_FIREBASE_OBJECT, CREATE_FIREBASE_OBJECT_SUCCESS,
+    CREATE_FIREBASE_OBJECT_FAILED
 } from './mainReducer';
 
 
 import { of } from "rxjs/observable/of";
 import { Observable } from 'rxjs';
+import 'rxjs/Rx';
 import { Effect, Actions, toPayload } from "@ngrx/effects";
 
 import { AngularFireDatabase } from 'angularfire2/database';
@@ -71,8 +74,17 @@ export class MainEffects {
         .catch((res: any) => Observable.of({ type: LOGOUT_FAILED, payload: res }))
 
 
+    @Effect() createFBObject$ = this.action$
+        // Listen for the 'CREATE_FIREBASE_OBJECT' action
+        .ofType(CREATE_FIREBASE_OBJECT)
+        .map(toPayload)
+        .switchMap(payload => {
+            debugger
+            console.log("in createFBObject$", payload)
+            return this.doCreateFirebaseObject(payload)
+        })
 
-    @Effect() getFBArray$ = this.action$.ofType('GET_FIREBASE_ARRAY')
+    @Effect() getFBArray$ = this.action$.ofType('GET_FIREBASE_ARRAY', 'CREATE_FIREBASE_OBJECT_SUCCESS')
         .do((action) => console.log(`Received ${action.type}`))
         .switchMap(payload => {
             return this.doFirebaseLoadArray(payload)
@@ -121,14 +133,55 @@ export class MainEffects {
         })
     }
 
+    /**
+     * 
+     * 
+     * @param {any} { objectType, objectData } 
+     * @returns 
+     * @memberof MainEffects
+     */
+    doCreateFirebaseObject({ objectType, objectData }) {
+        return Observable.create((observer) => {
+
+            // key an id for the object
+            let key = this.af.database.ref().child(objectType).push().key;
+
+            // create the object as an update with the path
+            // and the key info
+            var updates = {};
+            updates[`${objectType}/${key}`] = objectData;
+
+            // update the database
+            this.af.database.ref().update(updates)
+                .then((_result) => {
+                    return observer.next({
+                        type: CREATE_FIREBASE_OBJECT_SUCCESS,
+                        payload: { object: { ...objectData, $key: key }, path: objectType }
+                    })
+                }, (error) => {
+                    console.log("error", error)
+                    return observer.next({ type: CREATE_FIREBASE_OBJECT_FAILED, payload: error })
+                })
+        });
+    }
+
     doFirebaseLoadArray(_params) {
         return Observable.create((observer) => {
             var path = _params.payload.path
-            var s: any = this.af.object(path)
-            s.flatMap(() => this.af.list(path))
+            this.af.list(path).snapshotChanges()
                 .take(1)
                 .subscribe(items => {
-                    observer.next({ type: GET_FIREBASE_ARRAY_SUCCESS, payload: items })
+                    // we need to iterate through the snapshot to
+                    // get the values, but also include the $key
+                    // in the object for later use
+                    observer.next({
+                        type: GET_FIREBASE_ARRAY_SUCCESS,
+                        payload: items.map((i) => {
+                            return {
+                                $key: i.key, ...i.payload.val()
+                            }
+                        })
+                    })
                 }, (error) => {
                     console.log(' ERROR: ' + error);
                     observer.next({ type: GET_FIREBASE_ARRAY_FAILED, payload: error })
@@ -137,8 +190,7 @@ export class MainEffects {
     }
     doFirebaseLoadObject(_params) {
         return Observable.create((observer) => {
-            var s: any = this.af.object(_params.path)
-            s.flatMap(() => this.af.object(_params.path))
+            this.af.object(_params.path).valueChanges()
                 .take(1)
                 .subscribe(items => {
                     observer.next({ type: GET_FIREBASE_OBJECT_SUCCESS, payload: items })
