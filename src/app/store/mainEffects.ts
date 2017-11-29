@@ -8,7 +8,9 @@ import {
     GET_FIREBASE_OBJECT, GET_FIREBASE_OBJECT_SUCCESS,
     GET_FIREBASE_OBJECT_FAILED,
     CREATE_FIREBASE_OBJECT, CREATE_FIREBASE_OBJECT_SUCCESS,
-    CREATE_FIREBASE_OBJECT_FAILED
+    CREATE_FIREBASE_OBJECT_FAILED,
+    DELETE_FIREBASE_OBJECT, DELETE_FIREBASE_OBJECT_SUCCESS,
+    DELETE_FIREBASE_OBJECT_FAILED
 } from './mainReducer';
 
 
@@ -83,6 +85,17 @@ export class MainEffects {
             console.log("in createFBObject$", payload)
             return this.doCreateFirebaseObject(payload)
         })
+
+
+    @Effect() deleteFBObject$ = this.action$
+        // Listen for the 'DELETE_FIREBASE_OBJECT' action
+        .ofType(DELETE_FIREBASE_OBJECT)
+        .map(toPayload)
+        .switchMap(payload => {
+            console.log("in deleteFBObject$", payload)
+            return this.doDeleteFirebaseObject(payload)
+        })
+
 
     @Effect() getFBArray$ = this.action$.ofType('GET_FIREBASE_ARRAY', 'CREATE_FIREBASE_OBJECT_SUCCESS')
         .do((action) => console.log(`Received ${action.type}`))
@@ -161,6 +174,24 @@ export class MainEffects {
                 }, (error) => {
                     console.log("error", error)
                     return observer.next({ type: CREATE_FIREBASE_OBJECT_FAILED, payload: error })
+                })
+        });
+    }
+
+
+    doDeleteFirebaseObject({ objectType, $key }) {
+        return Observable.create((observer) => {
+
+            // key an id for the object
+            this.af.list(objectType).remove($key)
+                .then((_result) => {
+                    return observer.next({
+                        type: DELETE_FIREBASE_OBJECT_SUCCESS,
+                        payload: { $key }
+                    })
+                }, (error) => {
+                    console.log("error", error)
+                    return observer.next({ type: DELETE_FIREBASE_OBJECT_FAILED, payload: error })
                 })
         });
     }

@@ -1,12 +1,13 @@
-import { 
-  CHECK_AUTH, 
-  LOGOUT, 
-  LOGIN, 
-  CREATE_USER, 
-  GET_FIREBASE_ARRAY, 
+import {
+  CHECK_AUTH,
+  LOGOUT,
+  LOGIN,
+  CREATE_USER,
+  GET_FIREBASE_ARRAY,
   GET_FIREBASE_OBJECT,
-  CREATE_FIREBASE_OBJECT
- } from './mainReducer';
+  CREATE_FIREBASE_OBJECT,
+  DELETE_FIREBASE_OBJECT
+} from './mainReducer';
 
 export class All {
   checkAuthAction = () => { return { type: CHECK_AUTH } }
@@ -31,10 +32,10 @@ export class All {
     }
   }
 
-  deleteFirebaseObject = ($key) => {
+  deleteFirebaseObject = ({$key, objectType}) => {
     return {
-      type: CREATE_FIREBASE_OBJECT,
-      payload: $key
+      type: DELETE_FIREBASE_OBJECT,
+      payload: { $key, objectType }
     }
   }
 

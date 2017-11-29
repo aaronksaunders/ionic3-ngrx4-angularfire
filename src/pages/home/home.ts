@@ -96,7 +96,7 @@ export class HomePage implements OnInit {
   }
   // doItemQuery
   doItemDelete(_item) {
-    this.store.dispatch(new All().deleteFirebaseObject(_item.$key))
+    this.store.dispatch(new All().deleteFirebaseObject({ $key: _item.$key, objectType: 'assets' }))
   }
 
   presentModal() {

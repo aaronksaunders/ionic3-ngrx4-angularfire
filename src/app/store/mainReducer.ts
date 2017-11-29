@@ -22,6 +22,10 @@ export const CREATE_FIREBASE_OBJECT: string = "CREATE_FIREBASE_OBJECT";
 export const CREATE_FIREBASE_OBJECT_SUCCESS: string = "CREATE_FIREBASE_OBJECT_SUCCESS";
 export const CREATE_FIREBASE_OBJECT_FAILED: string = "CREATE_FIREBASE_OBJECT_FAILED"
 
+export const DELETE_FIREBASE_OBJECT: string = "DELETE_FIREBASE_OBJECT";
+export const DELETE_FIREBASE_OBJECT_SUCCESS: string = "DELETE_FIREBASE_OBJECT_SUCCESS";
+export const DELETE_FIREBASE_OBJECT_FAILED: string = "DELETE_FIREBASE_OBJECT_FAILED"
+
 export const CHECK_AUTH: string = "CHECK_AUTH";
 export const CHECK_AUTH_SUCCESS: string = "CHECK_AUTH_SUCCESS";
 export const CHECK_AUTH_NO_USER: string = "CHECK_AUTH_NO_USER";
@@ -45,7 +49,7 @@ export interface State {
 
 
 
-export function mainAppStoreReducer(state:State = intitialState, action: any) {
+export function mainAppStoreReducer(state: State = intitialState, action: any) {
 
   switch (action.type) {
 
@@ -127,10 +131,24 @@ export function mainAppStoreReducer(state:State = intitialState, action: any) {
       return Object.assign({}, state, { dataObject: action.payload, loading: true })
     }
     case CREATE_FIREBASE_OBJECT_SUCCESS: {
-      state.dataArray = [ ...state.dataArray, action.payload.object]
+      state.dataArray = [...state.dataArray, action.payload.object]
       return Object.assign({}, state, { dataObject: action.payload.object, loading: false })
     }
     case CREATE_FIREBASE_OBJECT_FAILED: {
+      return Object.assign({}, state, { error: action.payload, loading: false })
+    }
+
+    // DELETE AN OBJECT IN THE DATASTORE
+    case DELETE_FIREBASE_OBJECT: {
+      return Object.assign({}, state, { loading: true })
+    }
+    case DELETE_FIREBASE_OBJECT_SUCCESS: {
+      let dataArray = state.dataArray.filter((i) => {
+        return i.$key !== action.payload.$key
+      })
+      return Object.assign({}, state, { dataArray, dataObject: null, loading: false })
+    }
+    case DELETE_FIREBASE_OBJECT_FAILED: {
       return Object.assign({}, state, { error: action.payload, loading: false })
     }
 
