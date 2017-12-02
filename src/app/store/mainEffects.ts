@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-    CHECK_AUTH, CHECK_AUTH_SUCCESS, CHECK_AUTH_FAILED,
-    CHECK_AUTH_NO_USER, LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAILED,
-    LOGIN, LOGIN_SUCCESS, LOGIN_FAILED, CREATE_USER, CREATE_USER_SUCCESS,
-    CREATE_USER_FAILED, GET_FIREBASE_ARRAY, GET_FIREBASE_ARRAY_SUCCESS,
-    GET_FIREBASE_ARRAY_FAILED,
-    GET_FIREBASE_OBJECT, GET_FIREBASE_OBJECT_SUCCESS,
-    GET_FIREBASE_OBJECT_FAILED
-} from './mainReducer';
+import * as actions from './mainActions'
 
 
 import { of } from "rxjs/observable/of";
@@ -16,6 +8,7 @@ import { Effect, Actions, toPayload } from "@ngrx/effects";
 
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
+//import { map } from 'rxjs/operator/map';
 
 
 @Injectable()
@@ -31,61 +24,82 @@ export class MainEffects {
             console.log('logActions$', action);
         });
 
-    @Effect() login$ = this.action$.ofType('LOGIN')
+    @Effect() login$ = this.action$.ofType(actions.LOGIN)
         .map(toPayload)
-        .switchMap(payload => {
-            return this.doAuth(payload)
+        .switchMap(payload => { return this.doAuth(payload) })
+        .map((_result) => {
+            return { type: actions.LOGIN_SUCCESS, payload: _result }
+        }).catch((error) => {
+            console.log("error", error)
+            return of({ type: actions.LOGIN_FAILED, payload: error })
         })
 
     @Effect() createUser$ = this.action$
-        // Listen for the 'LOGOUT' action
-        .ofType(CREATE_USER)
+        // Listen for the 'CREATE_USER' action
+        .ofType(actions.CREATE_USER)
         .map(toPayload)
-        .switchMap(payload => {
-            console.log("in createUser$", payload)
-            return this.doCreateUser(payload)
+        .switchMap(payload => { return this.doCreateUser(payload) })
+        .map((_result) => {
+            console.log("_result", _result)
+            return { type: actions.CREATE_USER_SUCCESS, payload: _result }
+        }).catch((error) => {
+            console.log("error", error)
+            return of({ type: actions.CREATE_USER_FAILED, payload: error })
         })
 
 
-    @Effect() checkAuth$ = this.action$.ofType('CHECK_AUTH')
+    @Effect() checkAuth$ = this.action$.ofType(actions.CHECK_AUTH)
         .do((action) => console.log(`Received ${action.type}`))
         .switchMap(() => this.auth$.authState)
         .map((_result) => {
+            debugger
             if (_result) {
                 console.log("in auth subscribe", _result)
-                return { type: 'CHECK_AUTH_SUCCESS', payload: _result }
+                return { type: actions.CHECK_AUTH_SUCCESS, payload: _result }
             } else {
                 console.log("in auth subscribe - no user", _result)
-                return { type: 'CHECK_AUTH_NO_USER', payload: null }
+                return { type: actions.CHECK_AUTH_NO_USER, payload: null }
             }
 
-        }).catch((res: any) => Observable.of({ type: CHECK_AUTH_FAILED, payload: res }))
+        }).catch((res: any) => Observable.of({ type: actions.CHECK_AUTH_FAILED, payload: res }))
 
 
-    @Effect() logout$ = this.action$.ofType('LOGOUT')
+    @Effect() logout$ = this.action$.ofType(actions.LOGOUT)
         .do((action) => console.log(`Received ${action.type}`))
         .switchMap(() => this.auth$.auth.signOut())
         // If successful, dispatch success action with result
-        .map((res: any) => ({ type: LOGOUT_SUCCESS, payload: null }))
+        .map((res: any) => ({ type: actions.LOGOUT_SUCCESS, payload: null }))
         // If request fails, dispatch failed action
-        .catch((res: any) => Observable.of({ type: LOGOUT_FAILED, payload: res }))
+        .catch((res: any) => Observable.of({ type: actions.LOGOUT_FAILED, payload: res }))
 
 
 
-    @Effect() getFBArray$ = this.action$.ofType('GET_FIREBASE_ARRAY')
+    @Effect() getFBArray$ = this.action$.ofType(actions.GET_FIREBASE_ARRAY)
         .do((action) => console.log(`Received ${action.type}`))
         .switchMap(payload => {
             return this.doFirebaseLoadArray(payload)
+                .map((items) => {
+                    console.log(items)
+                    return { type: actions.GET_FIREBASE_ARRAY_SUCCESS, payload: items }
+                })
+                .catch((error) => {
+                    return of({ type: actions.GET_FIREBASE_ARRAY_FAILED, payload: error })
+                })
         })
 
-
-
     @Effect() getFBObject$ = this.action$
-        // Listen for the 'LOGOUT' action
-        .ofType(GET_FIREBASE_OBJECT)
+        // Listen for the 'GET_FIREBASE_OBJECT' action
+        .ofType(actions.GET_FIREBASE_OBJECT)
         .map(toPayload)
         .switchMap(payload => {
             return this.doFirebaseLoadObject(payload)
+                .map((item) => {
+                    console.log(item)
+                    return { type: actions.GET_FIREBASE_OBJECT_SUCCESS, payload: item }
+                })
+                .catch((error) => {
+                    return of({ type: actions.GET_FIREBASE_OBJECT_FAILED, payload: error })
+                })
         })
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,55 +111,19 @@ export class MainEffects {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     doAuth(_creds) {
         console.log("in do auth", _creds)
-        return Observable.create((observer) => {
-            this.auth$.auth.signInWithEmailAndPassword(_creds.email, _creds.password)
-                .then((_result) => {
-                    return observer.next({ type: LOGIN_SUCCESS, payload: _result })
-                }, (error) => {
-                    console.log("error", error)
-                    return observer.next({ type: LOGIN_FAILED, payload: error })
-                })
-        })
+        return this.auth$.auth.signInWithEmailAndPassword(_creds.email, _creds.password)
     }
 
     doCreateUser(_creds) {
-        return Observable.create((observer) => {
-            this.auth$.auth.createUserWithEmailAndPassword(_creds.email, _creds.password)
-                .then((_result) => {
-                    console.log("_result", _result)
-                    return observer.next({ type: CREATE_USER_SUCCESS, payload: _result })
-                }, (error) => {
-                    console.log("error", error)
-                    return observer.next({ type: CREATE_USER_FAILED, payload: error })
-                })
-        })
+        return this.auth$.auth.createUserWithEmailAndPassword(_creds.email, _creds.password)
     }
 
     doFirebaseLoadArray(_params) {
-        return Observable.create((observer) => {
-            var path = _params.payload.path
-            var s: any = this.af.object(path)
-            s.flatMap(() => this.af.list(path))
-                .take(1)
-                .subscribe(items => {
-                    observer.next({ type: GET_FIREBASE_ARRAY_SUCCESS, payload: items })
-                }, (error) => {
-                    console.log(' ERROR: ' + error);
-                    observer.next({ type: GET_FIREBASE_ARRAY_FAILED, payload: error })
-                })
-        })
+        var path = _params.payload.path
+        return this.af.list(path).take(1)
     }
+
     doFirebaseLoadObject(_params) {
-        return Observable.create((observer) => {
-            var s: any = this.af.object(_params.path)
-            s.flatMap(() => this.af.object(_params.path))
-                .take(1)
-                .subscribe(items => {
-                    observer.next({ type: GET_FIREBASE_OBJECT_SUCCESS, payload: items })
-                }, (error) => {
-                    console.log(' ERROR: ' + error);
-                    observer.next({ type: GET_FIREBASE_OBJECT_FAILED, payload: error })
-                })
-        })
+        return this.af.object(_params.path).take(1)
     }
 }
