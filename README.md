@@ -16,27 +16,43 @@
 
 ```console
 
-cli packages:
+cli packages: (/Users/aaronsaunders/.nvm/versions/node/v6.10.2/lib/node_modules)
 
-    @ionic/cli-plugin-ionic-angular : 1.4.0 ($HOME/dev/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-plugin-ionic-angular)
-    @ionic/cli-utils                : 1.6.0 ($HOME/dev/ionic2/ionic3-ngrx-angularfire/node_modules/@ionic/cli-utils)
-    ionic (Ionic CLI)               : 3.6.0 ($HOME/dev/ionic2/ionic3-ngrx-angularfire/node_modules/ionic)
+    @ionic/cli-utils  : 1.19.0
+    ionic (Ionic CLI) : 3.19.0
 
 local packages:
 
-    @ionic/app-scripts : 2.1.3
-    Ionic Framework    : ionic-angular 3.6.0
+    @ionic/app-scripts : 3.1.2
+    Ionic Framework    : ionic-angular 3.9.2
 
 System:
 
-    Android SDK Tools : 26.0.2
-    Node              : v6.9.1
-    OS                : macOS Sierra
-    Xcode             : Xcode 8.3.3 Build version 8E3004b 
-    ios-deploy        : 1.9.1 
-    ios-sim           : 6.0.0 
-    npm               : 5.3.0 
+    Node : v6.10.2
+    npm  : 3.10.10
+    OS   : macOS Sierra
 
+Misc:
+
+    backend : pro
+
+```
+
+## Firebase Configuration
+
+Must export the config, create a file in the `/src/environment.ts` that looks like this..
+
+see comment in code - https://github.com/aaronksaunders/ionic3-ngrx4-angularfire/blob/master/src/app/app.module.ts#L26
+
+```
+export const firebaseProps = {
+   "apiKey": " ",
+   "authDomain": " ",
+   "databaseURL": " ",
+   "projectId": " ",
+   "storageBucket": " ",
+   "messagingSenderId": ""
+}
 ```
 
 ## More Information on ngRx4

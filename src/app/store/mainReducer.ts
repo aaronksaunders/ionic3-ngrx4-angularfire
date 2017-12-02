@@ -18,7 +18,7 @@ export interface State {
 
 
 
-export function mainAppStoreReducer(state = intitialState, action: any) {
+export function mainAppStoreReducer(state: State = intitialState, action: any) {
 
   switch (action.type) {
 
@@ -94,6 +94,33 @@ export function mainAppStoreReducer(state = intitialState, action: any) {
     case actions.GET_FIREBASE_OBJECT_FAILED: {
       return Object.assign({}, state, { error: action.payload, loading: false })
     }
+
+    // CREATE AN OBJECT IN THE DATASTORE
+    case actions.CREATE_FIREBASE_OBJECT: {
+      return Object.assign({}, state, { dataObject: action.payload, loading: true })
+    }
+    case actions.CREATE_FIREBASE_OBJECT_SUCCESS: {
+      state.dataArray = [...state.dataArray, action.payload.object]
+      return Object.assign({}, state, { dataObject: action.payload.object, loading: false })
+    }
+    case actions.CREATE_FIREBASE_OBJECT_FAILED: {
+      return Object.assign({}, state, { error: action.payload, loading: false })
+    }
+
+    // DELETE AN OBJECT IN THE DATASTORE
+    case actions.DELETE_FIREBASE_OBJECT: {
+      return Object.assign({}, state, { loading: true })
+    }
+    case actions.DELETE_FIREBASE_OBJECT_SUCCESS: {
+      let dataArray = state.dataArray.filter((i) => {
+        return i.$key !== action.payload.$key
+      })
+      return Object.assign({}, state, { dataArray, dataObject: null, loading: false })
+    }
+    case actions.DELETE_FIREBASE_OBJECT_FAILED: {
+      return Object.assign({}, state, { error: action.payload, loading: false })
+    }
+
     default: {
       return state;
     }

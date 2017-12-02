@@ -1,0 +1,31 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-buttons start>
+            <button ion-button color="danger" (click)="cancel()">Cancel</button>
+        </ion-buttons>
+        <ion-title>Add A New Item</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+    <ion-card>
+        <ion-card-content>
+            <ion-item>
+                <ion-label color="primary" floating>Name</ion-label>
+                <ion-input [(ngModel)]="item.name"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label color="primary" floating>Text</ion-label>
+                <ion-textarea [(ngModel)]="item.text" rows="3">
+                </ion-textarea>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+    <div padding>
+        <button block ion-button (click)="saveItem()">Save</button>
+    </div>
+
+</ion-content>

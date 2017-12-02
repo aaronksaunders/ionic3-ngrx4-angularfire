@@ -1,8 +1,11 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Firebase ngrx Ionic2
-    </ion-title>
+    <ion-title>Firebase Ionic2 NGRX</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-end outline (click)="presentModal()">
+        ADD
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -12,8 +15,8 @@
   <ion-row responsive-sm *ngIf="(storeInfo | async)?.error">
     <ion-col>
       <strong>
-            <h4  style="color:red">Error:&nbsp;{{ (storeInfo | async)?.error }}</h4>
-        </strong>
+        <h4 style="color:red">Error:&nbsp;{{ (storeInfo | async)?.error }}</h4>
+      </strong>
     </ion-col>
   </ion-row>
 
@@ -24,8 +27,9 @@
       <ion-list>
         <ion-item *ngFor="let item of (storeInfo | async)?.dataArray">
           <div>{{item.name}}</div>
-          <p>{{item.when | date }}</p>
+          <p>{{item.createdOn }}</p>
           <button ion-button (click)="doItemQuery(item)">GET ITEM</button>
+          <button ion-button color="danger" (click)="doItemDelete(item)">DELETE ITEM</button>
         </ion-item>
       </ion-list>
     </ion-row>
