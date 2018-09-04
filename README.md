@@ -1,3 +1,6 @@
+# UPDATE NOTICE: September 1, 2018
+> I am updating this project to the latest release of Ionic, Firebase and NGRX. Please see progress here https://github.com/aaronksaunders/ionic4-ngrx-firebase
+
 # Ionic3.0 Angularfire2 w/ state management using ngrx4
 
  ![ionic2](https://raw.githubusercontent.com/aaronksaunders/ionic2.0-angularfire/master/Untitled.png)
